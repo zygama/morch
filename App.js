@@ -499,7 +499,6 @@ export default class App extends Component<{}> {
 //                         End Morse letters and numbers
 // ========================================================================== //
 
-
   async SOS() {
     await this.morse_S();
     await this.sleep(this.pointDuration);
@@ -542,82 +541,82 @@ export default class App extends Component<{}> {
       } if (p_letterToSayInMorse === '9') {
         await this.morse_9();
         resolve();
-      } else if (p_letterToSayInMorse === '/a/i') {
+      } else if (p_letterToSayInMorse === 'a') {
         await this.morse_A();
         resolve();
-      } else if (p_letterToSayInMorse === '/b/i') {
+      } else if (p_letterToSayInMorse === 'b') {
         await this.morse_B();
         resolve();
-      } else if (p_letterToSayInMorse === '/c/i') {
+      } else if (p_letterToSayInMorse === 'c') {
         await this.morse_C();
         resolve();
-      } else if (p_letterToSayInMorse === '/d/i') {
+      } else if (p_letterToSayInMorse === 'd') {
         await this.morse_D();
         resolve();
-      } else if (p_letterToSayInMorse === '/e/i') {
+      } else if (p_letterToSayInMorse === 'e') {
         await this.morse_E();
         resolve();
-      } else if (p_letterToSayInMorse === '/f/i') {
+      } else if (p_letterToSayInMorse === 'f') {
         await this.morse_F();
         resolve();
-      } else if (p_letterToSayInMorse === '/g/i') {
+      } else if (p_letterToSayInMorse === 'g') {
         await this.morse_G();
         resolve();
-      } else if (p_letterToSayInMorse === '/h/i') {
+      } else if (p_letterToSayInMorse === 'h') {
         await this.morse_H();
         resolve();
-      } else if (p_letterToSayInMorse === '/i/i') {
+      } else if (p_letterToSayInMorse === 'i') {
         await this.morse_I();
         resolve();
-      } else if (p_letterToSayInMorse === '/j/i') {
+      } else if (p_letterToSayInMorse === 'j') {
         await this.morse_J();
         resolve();
-      } else if (p_letterToSayInMorse === '/k/i') {
+      } else if (p_letterToSayInMorse === 'k') {
         await this.morse_K();
         resolve();
-      } else if (p_letterToSayInMorse === '/l/i') {
+      } else if (p_letterToSayInMorse === 'l') {
         await this.morse_L();
         resolve();
-      } else if (p_letterToSayInMorse === '/m/i') {
+      } else if (p_letterToSayInMorse === 'm') {
         await this.morse_M();
         resolve();
-      } else if (p_letterToSayInMorse === '/n/i') {
+      } else if (p_letterToSayInMorse === 'n') {
         await this.morse_N();
         resolve();
-      } else if (p_letterToSayInMorse === '/o/i') {
+      } else if (p_letterToSayInMorse === 'o') {
         await this.morse_O();
         resolve();
-      } else if (p_letterToSayInMorse === '/p/i') {
+      } else if (p_letterToSayInMorse === 'p') {
         await this.morse_P();
         resolve();
-      } else if (p_letterToSayInMorse === '/q/i') {
+      } else if (p_letterToSayInMorse === 'q') {
         await this.morse_Q();
         resolve();
-      } else if (p_letterToSayInMorse === '/r/i') {
+      } else if (p_letterToSayInMorse === 'r') {
         await this.morse_R();
         resolve();
-      } else if (p_letterToSayInMorse === '/s/i') {
+      } else if (p_letterToSayInMorse === 's') {
         await this.morse_S();
         resolve();
-      } else if (p_letterToSayInMorse === '/t/i') {
+      } else if (p_letterToSayInMorse === 't') {
         await this.morse_T();
         resolve();
-      } else if (p_letterToSayInMorse === '/u/i') {
+      } else if (p_letterToSayInMorse === 'u') {
         await this.morse_U();
         resolve();
-      } else if (p_letterToSayInMorse === '/v/i') {
+      } else if (p_letterToSayInMorse === 'v') {
         await this.morse_V();
         resolve();
-      } else if (p_letterToSayInMorse === '/w/i') {
+      } else if (p_letterToSayInMorse === 'w') {
         await this.morse_W();
         resolve();
-      } else if (p_letterToSayInMorse === '/x/i') {
+      } else if (p_letterToSayInMorse === 'x') {
         await this.morse_X();
         resolve();
-      } else if (p_letterToSayInMorse === '/y/i') {
+      } else if (p_letterToSayInMorse === 'y') {
         await this.morse_Y();
         resolve();
-      } else if (p_letterToSayInMorse === '/z/i') {
+      } else if (p_letterToSayInMorse === 'z') {
         await this.morse_Z();
         resolve();
       }
@@ -625,10 +624,12 @@ export default class App extends Component<{}> {
   }
 
   async sayWordInMorse(p_wordToSayInMorse) {
-    for (const i = 0; i < p_wordToSayInMorse.length; i++) {
-      console.log(p_wordToSayInMorse.charAt(i));
-      await this.sayLetterInMorse(p_wordToSayInMorse.charAt(i));
-      if (i < p_wordToSayInMorse.length - 1) {
+    const currentString = p_wordToSayInMorse.toLowerCase();
+
+    for (const i = 0; i < currentString.length; i++) {
+      console.log(currentString.charAt(i));
+      await this.sayLetterInMorse(currentString.charAt(i));
+      if (i < currentString.length - 1) {
         await this.sleep(this.pointDuration * 3); // space between 2 letters = 3 pts
       }
     }
@@ -648,7 +649,7 @@ export default class App extends Component<{}> {
 
     	if (cameraAllowed) {
         console.log("allowed");
-    		await this.sayWordInMorse("1");
+    		await this.sayWordInMorse("SOS");
     	} else {
         console.log("not allowed");
       }
