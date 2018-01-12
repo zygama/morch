@@ -10,17 +10,30 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native';
 import Torch from 'react-native-torch';
+import { height, width } from 'react-native-dimension';
+
+import ModeButton from './components/ModeButton';
+// import Morse from './api/Morse';
+
+
 
 export default class App extends Component<{}> {
 
   constructor(props) {
     super(props);
-    this.torchState = false;
-    this.pointDuration = 500; //ms
+    this.torchOn = false;
+    this.pointDuration = 500; // ms
   }
+
+  state = {
+    classicTorchMode: true, // it can only be one of two active and the other inactive
+    morseTorchMode: false,
+    textInput: ''
+  };
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,9 +59,9 @@ export default class App extends Component<{}> {
     });
   }
 
-// ========================================================================== //
-//                      Beginning Morse letters and numbers
-// ========================================================================== //
+  // ========================================================================== //
+  //                     Declaration Morse letters and numbers
+  // ========================================================================== //
 
   async morse_0() {
     return new Promise( async (resolve) => {
@@ -494,10 +507,9 @@ export default class App extends Component<{}> {
     });
   }
 
-
-// ========================================================================== //
-//                         End Morse letters and numbers
-// ========================================================================== //
+  // ========================================================================== //
+  //                         End Morse letters and numbers
+  // ========================================================================== //
 
   async SOS() {
     await this.morse_S();
@@ -507,7 +519,7 @@ export default class App extends Component<{}> {
     await this.morse_S();
   }
 
-// ========================================================================== //
+  // ========================================================================== //
 
   async sayLetterInMorse(p_letterToSayInMorse) {
     return new Promise( async (resolve) => {
@@ -623,34 +635,86 @@ export default class App extends Component<{}> {
     });
   }
 
-  async sayWordInMorse(p_wordToSayInMorse) {
-    const currentString = p_wordToSayInMorse.toLowerCase();
+  sayWordInMorse = async (p_wordToSayInMorse) => {
 
-    for (const i = 0; i < currentString.length; i++) {
-      console.log(currentString.charAt(i));
-      await this.sayLetterInMorse(currentString.charAt(i));
-      if (i < currentString.length - 1) {
-        await this.sleep(this.pointDuration * 3); // space between 2 letters = 3 pts
+    return new Promise( async (resolve) => {
+      const currentString = p_wordToSayInMorse.toLowerCase();
+
+      for (const i = 0; i < currentString.length; i++) {
+        console.log(currentString.charAt(i));
+        await this.sayLetterInMorse(currentString.charAt(i));
+        if (i < currentString.length - 1) {
+          await this.sleep(this.pointDuration * 3); // space between 2 letters = 3 pts
+        }
       }
+      console.log('word in morse entirely said');
+      resolve();
+    } );
+  }
+
+   translateToMorse = (p_wordToSayInMorse) => {
+    // return new Promise ( async (resolve) => {
+    //
+    //   resolve();
+    // });
+    isStringValid = (str) => {
+      const regExp = /^\w +$+/;
+      console.log(str);
+      if (regExp.test(str)) {
+        if (str.indexOf('_') === -1 ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    if (p_wordToSayInMorse.length >= 1 && isStringValid(p_wordToSayInMorse)) {
+      console.log("c ok");
     }
   }
 
-  async allume() {
-    this.torchState = !this.torchState;
+//==================================================================================//
 
+  onChangeTextInput = (text) => {
+    this.setState({ textInput: text });
+  }
+
+  buttonTorchPressed = () => { // arrow function for performance
+    if (this.state.morseTorchMode && !this.torchOn) {
+      this.setState({
+        morseTorchMode: false,
+        classicTorchMode: true
+      });
+    }
+  }
+
+  buttonMorsePressed = () => { // arrow function for performance
+    if (this.state.classicTorchMode && !this.torchOn) {
+      this.setState({
+        morseTorchMode: true,
+        classicTorchMode: false
+      });
+    }
+  }
+
+  buttonOnOffPressed = async () => {
     if (Platform.OS === 'ios') {
-    	Torch.switchState(this.torchState);
+      Torch.switchState(this.torchOn);
     } else {
       console.log("android");
-    	const cameraAllowed = await Torch.requestCameraPermission(
-    		'Camera Permissions', // dialog title
-    		'We require camera permissions to use the torch on the back of your phone.' // dialog body
-    	);
+      const cameraAllowed = await Torch.requestCameraPermission(
+        'Camera Permissions', // dialog title
+        'We require camera permissions to use the torch on the back of your phone.' // dialog body
+      );
 
-    	if (cameraAllowed) {
-        console.log("allowed");
-    		await this.sayWordInMorse("SOS");
-    	} else {
+      if (cameraAllowed) {
+        if (this.state.classicTorchMode) {
+          this.torchOn = !this.torchOn;
+          Torch.switchState(this.torchOn);
+        } else { // if this.state.morseTorchMode
+          /*await*/ this.translateToMorse(this.state.textInput);
+        }
+      } else {
         console.log("not allowed");
       }
     }
@@ -659,14 +723,39 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableHighlight
-          onPress={() => this.allume()}
-          style={styles.button}
-        >
-          <Text>
-            lampe
-          </Text>
-        </TouchableHighlight>
+
+        <View style={styles.modeButtons}>
+          <ModeButton
+            onPress={this.buttonTorchPressed}
+            text="Torch"
+            color={this.state.classicTorchMode ? "purple" : "gray"}
+          />
+          <ModeButton
+            onPress={this.buttonMorsePressed}
+            text="Morse"
+            color={this.state.morseTorchMode ? "purple" : "gray"}
+          />
+        </View>
+
+        <View style={{ alignItems: "center", paddingTop: height(6) }}>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={this.onChangeTextInput}
+            value={this.state.textInput}
+            underlineColorAndroid='transparent'
+            editable={this.state.morseTorchMode}
+          />
+        </View>
+
+        <View style={styles.buttonOnOff}>
+          <ModeButton
+            onPress={this.buttonOnOffPressed}
+            borderRadius={100}
+            text="Clic"
+            color="purple"
+          />
+        </View>
+
       </View>
     );
   }
@@ -675,18 +764,31 @@ export default class App extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  modeButtons: {
+    justifyContent: 'space-around',
+    flexDirection: "row",
+    marginTop: height(15)
   },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10
+  textInput: {
+    height: height(6),
+    width: width(80),
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10
+  },
+  buttonOnOff: {
+    alignItems: "center",
+    marginTop: height(25)
   }
 });
+
+// <TouchableHighlight
+//   onPress={this.buttonPressed}
+//   style={styles.button}
+// >
+//   <Text>
+//     lampee
+//   </Text>
+// </TouchableHighlight>
