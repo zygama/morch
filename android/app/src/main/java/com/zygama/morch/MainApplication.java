@@ -1,8 +1,9 @@
-package com.torch;
+package com.zygama.morch;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
 import com.cubicphuse.RCTTorch.RCTTorchPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -11,6 +12,8 @@ import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
 import java.util.List;
+
+import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -24,7 +27,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RCTTorchPackage()
+            new RNFirebasePackage(),
+            new RCTTorchPackage(),
+            new RNFirebaseAdMobPackage()
       );
     }
 

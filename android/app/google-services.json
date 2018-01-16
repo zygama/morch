@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "634002570803",
+    "firebase_url": "https://morch-7d1f7.firebaseio.com",
+    "project_id": "morch-7d1f7",
+    "storage_bucket": "morch-7d1f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634002570803:android:b78f982b4d5c2152",
+        "android_client_info": {
+          "package_name": "com.zygama.morch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634002570803-kaosnk1uadd92570bpg84evrpoac7ken.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-WArClALOVvcQxy2OVuYZraEc_Vkw2VY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

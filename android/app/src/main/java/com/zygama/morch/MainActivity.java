@@ -1,4 +1,4 @@
-package com.torch;
+package com.zygama.morch;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "torch";
+        return "ccc";
     }
 }

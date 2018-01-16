@@ -1,4 +1,6 @@
-rootProject.name = 'torch'
+rootProject.name = 'morch'
+include ':react-native-firebase'
+project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':react-native-torch'
 project(':react-native-torch').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-torch/android')
 
